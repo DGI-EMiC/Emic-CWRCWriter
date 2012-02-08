@@ -13,26 +13,40 @@ $.urlParam = function(name){
 // content is passed to the editor in the Writer's config object
 
 $('document').ready(function(){
-  var url = 'http://localhost/CWRCEditor/resources/Islandora/getPageContents.php?PID=' + $.urlParam('PID');
+  var PID = $.urlParam('PID');
   var file_content = '';
+  var CWRC = "FALSE";
   $.ajax({
-    url: url,
+    url: 'http://localhost/Development/cwrc/checkCWRC/' + PID,
+    async:false,
+    success: function(data, status, xhr) {
+      CWRC = data;
+    },
+    error: function() {
+      alert("AJAX call failed");
+    }
+
+  });
+  $.ajax({
+     url: 'http://localhost/Development/cwrc/ocr/'+ PID,
     async:false,
     success: function(data, status, xhr) {
       file_content=data;
-     
     },
     error: function() {
-      alert("Data loading was unsuccessful");
+      alert("OCR loading was unsuccessful");
     }
 
   });
   
   writer = new Writer({
     'file_content' : file_content,
-    'PID' : $.urlParam('PID')
+    'CWRC' : CWRC,
+    'PID' : PID
   });
   writer.init();
+  $('#reference_image').attr('src', 'http://localhost:8080/fedora/objects/' + PID + '/datastreams/JPEG/content');
  
 });
-      
+     
+

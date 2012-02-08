@@ -8,6 +8,7 @@ var Writer = function(config) {
   }
 
   var PID = config.PID;
+  var CWRC = config.CWRC;
   var file_pid = PID.replace(':', '_');
   // end of DHSI modifications
   var w = {
@@ -73,7 +74,7 @@ var Writer = function(config) {
 	
   var _onInitHandler = function(ed) {
 
-//changed for DHSI
+    //changed for DHSI
     ed.setContent(file_content);
 		
     ed.addCommand('isSelectionValid', w.isSelectionValid);
@@ -116,25 +117,20 @@ var Writer = function(config) {
       // need to do this here instead of in onchangehandler because that one doesn't update often enough
       if (evt.keyCode == 8 || evt.keyCode == 46) {
         _findDeletedEntities();
-      //				for (key in structs) {
-      //					var struct = editor.dom.get('#'+key);
-      //					if (!struct) {
-      //						updateStructureTree();
-      //						break;
-      //					}
-      //				}
       }
-    //
-    //			// enter key check
-    //			if (evt.keyCode == 13) {
-    //				updateStructureTree();
-    //			}
+
     });
 		
     _doResize();
 		
     // populate with the initial paragraph
     w.tree.update(true);
+
+    //  will replace text data with full CWRC stream if one exists.
+    if (CWRC== 'TRUE'){
+      w.fm.loadEMICDocument(file_pid);
+    }
+ 
   };
 	
   var _onChangeHandler = function(ed) {
@@ -698,10 +694,10 @@ var Writer = function(config) {
       }
     });
 
-// added PID paramater 
+    // added PID paramater
     w.fm = new FileManager({
       writer: w,
-      'file_pid': file_pid
+      'file_pid': PID
     });
     w.tree = new StructureTree({
       writer: w

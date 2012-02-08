@@ -63,7 +63,7 @@
 			<div class="col3">
 				<!-- Column 3 start -->
 			<div id="zoom01" class="zoom">
-				<img src="http://localhost:8080/fedora/objects/islandora%3A1709-006/datastreams/JPEG/content" alt="Image Loading" title="Repository Image" />
+				<img id="reference_image" src="http://localhost:8080/fedora/objects/islandora%3A1709-006/datastreams/JPEG/content" alt="Image Loading" title="Repository Image" />
 			</div>
 
 			<!-- Column 3 end -->
@@ -80,8 +80,8 @@
 				$("#zoom01").gzoom({
 						sW: 400,
 						sH: 650,
-						lW: 800,
-						lH: 1300,
+						lW: 1600,
+						lH: 2600,
 						lighbox : false
 				});
 

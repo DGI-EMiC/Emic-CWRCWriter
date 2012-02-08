@@ -1,9 +1,7 @@
 var FileManager = function(config) {
 
   // added for DHSI
-  var file_pid = config.file_pid;	
-  var currentDoc = file_pid;
-
+  var filePid = config.file_pid;
   var w = config.writer;
   var docNames = [];
 	
@@ -119,7 +117,7 @@ var FileManager = function(config) {
   });
 	
   var fm = {};
-	
+  currentDoc = filePid;
   fm.openLoader = function() {
     $('#files').css({
       borderColor: '#fff'
@@ -144,15 +142,6 @@ var FileManager = function(config) {
         docNames = data;
       }, callback]
     });
-  //		var data = {
-  //			response: []
-  //		};
-  //		var length = Math.ceil(Math.random()*10);
-  //		for (var i = 0; i < length; i++) {
-  //			data.response.push('Random Doc '+i);
-  //		}
-  //		docNames = data.response;
-  //		if (callback) callback();
   };
 	
   var _populateLoader = function() {
@@ -200,18 +189,20 @@ var FileManager = function(config) {
   };
 	
   fm.saveDocument = function() {
+ 
     if (currentDoc == null) {
       fm.openSaver();
     } else {
+   
       var docText = _exportDocument();
       $.ajax({
-        //url: 'http://apps.testing.cwrc.ca/editor/documents/'+currentDoc,
-        url : 'http://localhost/CWRCEditor/resources/Islandora/saveFile.php',
+      
+        url : 'http://localhost/Development/cwrc/save/',
         type: 'POST',
         dataType: 'text',
         data: {
           "text" : docText,
-          'file_pid':file_pid
+          'file_pid':filePid
         },
         success: function(data, status, xhr) {
           w.editor.isNotDirty = 1; // force clean state
@@ -235,7 +226,6 @@ var FileManager = function(config) {
     // remove highlights
     w.highlightEntity();
     w.highlightStructureTag();
-		
     var doc = w.editor.getDoc();
     var originalDoc = $(doc.body).clone(false, true); // make a copy, don't clone body events, but clone child events
     var head, content, exportText;
@@ -262,6 +252,7 @@ var FileManager = function(config) {
       }
       head += '</rdf:RDF></head>';
       exportText = head + content;
+      
     } else {
       head = '<?xml version="1.0"?><html><head></head>';
       for (var id in w.entities) {
@@ -332,8 +323,32 @@ var FileManager = function(config) {
       dataType: 'xml'
     });
   };
+
+  // added for DHSI
+
+  fm.loadEMICDocument = function(docName) {
+
+    w.entities = {};
+    w.structs = {};
+    var url = 'http://localhost/CWRCEditor/resources/Islandora/getCWRCData.php?PID=' + $.urlParam('PID');
+    var file_content = '';
+    $.ajax({
+      url: url,
+     
+      success: _loadDocumentHandler,
+      error: function() {
+        alert("Data loading was unsuccessful");
+      },
+      dataType: 'xml'
+
+    });
+  };
 	
   var _loadDocumentHandler = function(doc) {
+    var html = $(doc).find('html');
+    if  (html.length ==0){
+      return;
+    };
     var offsets = {};
 		
     var maxId = 0; // track what the largest id num is
@@ -399,6 +414,7 @@ var FileManager = function(config) {
         xmlString = (new XMLSerializer()).serializeToString(body);
       }
     } catch (e) {
+      return;
       alert(e);
     }
     w.editor.setContent(xmlString);
@@ -479,11 +495,6 @@ var FileManager = function(config) {
     edit.dialog('open');
   };
 
-
-  fm.preload_doc = function(doc){
-    _loadDocumentHandler(doc);
-    alert('fired');
-  };
 	
   return fm;
 };

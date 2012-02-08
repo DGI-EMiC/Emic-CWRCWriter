@@ -7,4 +7,3 @@ make the application aware of the PID of the object being edited.
 index.php in the resources folder contains the page markup.
 
 
-todo - incorporate reference image in index page
