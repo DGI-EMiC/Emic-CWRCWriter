@@ -32,6 +32,7 @@ $('document').ready(function(){
     async:false,
     success: function(data, status, xhr) {
       file_content=data;
+     
     },
     error: function() {
       alert("OCR loading was unsuccessful");
@@ -46,6 +47,7 @@ $('document').ready(function(){
   });
   writer.init();
   $('#reference_image').attr('src', 'http://localhost:8080/fedora/objects/' + PID + '/datastreams/JPEG/content');
+  $('#placeholder').hide();
  
 });
      
