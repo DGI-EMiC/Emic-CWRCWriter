@@ -81,7 +81,7 @@
 			</div>
       </div>
       <div id="main">
-        <div id="placeholder">Loading....</div>
+        &nbsp;
 				<form method="post" action="">
           <textarea id="editor" name="editor" class="tinymce">Loading</textarea>
         </form>

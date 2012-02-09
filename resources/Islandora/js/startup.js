@@ -13,41 +13,24 @@ $.urlParam = function(name){
 // content is passed to the editor in the Writer's config object
 
 $('document').ready(function(){
-  var PID = $.urlParam('PID');
-  var file_content = '';
-  var CWRC = "FALSE";
+  PID = $.urlParam('PID');
   $.ajax({
-    url: 'http://localhost/Development/cwrc/checkCWRC/' + PID,
+    url: 'http://localhost/Development/cwrc/setupCWRC/' + PID,
     async:false,
     success: function(data, status, xhr) {
-      CWRC = data;
+      cwrc_params = data;
     },
     error: function() {
       alert("AJAX call failed");
-    }
-
-  });
-  $.ajax({
-     url: 'http://localhost/Development/cwrc/ocr/'+ PID,
-    async:false,
-    success: function(data, status, xhr) {
-      file_content=data;
-     
     },
-    error: function() {
-      alert("OCR loading was unsuccessful");
-    }
+    dataType: 'json'
 
   });
-  
-  writer = new Writer({
-    'file_content' : file_content,
-    'CWRC' : CWRC,
-    'PID' : PID
-  });
+
+  writer = new Writer();
   writer.init();
   $('#reference_image').attr('src', 'http://localhost:8080/fedora/objects/' + PID + '/datastreams/JPEG/content');
-  $('#placeholder').hide();
+
  
 });
      

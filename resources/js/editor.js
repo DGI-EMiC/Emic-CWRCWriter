@@ -2,14 +2,13 @@ var Writer = function(config) {
   config = config || {};
 
   //added for DHSI project
-  var file_content = config.file_content;
+  var file_content = cwrc_params.ocr;
   if (file_content == null){
     file_content = "<p>Paste or type your text here.</p>";
   }
 
-  var PID = config.PID;
   var CWRC = config.CWRC;
-  var file_pid = PID.replace(':', '_');
+
   // end of DHSI modifications
   var w = {
     editor: null, // reference to the tinyMCE instance we're creating, set in setup
@@ -127,8 +126,8 @@ var Writer = function(config) {
     w.tree.update(true);
 
     //  will replace text data with full CWRC stream if one exists.
-    if (CWRC== 'TRUE'){
-      w.fm.loadEMICDocument(file_pid);
+    if (cwrc_params.CWRC != 'FALSE'){
+      w.fm.loadEMICDocument();
     }
  
   };
@@ -694,10 +693,9 @@ var Writer = function(config) {
       }
     });
 
-    // added PID paramater
+
     w.fm = new FileManager({
-      writer: w,
-      'file_pid': PID
+      writer: w  
     });
     w.tree = new StructureTree({
       writer: w

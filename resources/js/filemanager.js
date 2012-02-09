@@ -1,7 +1,6 @@
 var FileManager = function(config) {
 
-  // added for DHSI
-  var filePid = config.file_pid;
+  
   var w = config.writer;
   var docNames = [];
 	
@@ -117,7 +116,7 @@ var FileManager = function(config) {
   });
 	
   var fm = {};
-  currentDoc = filePid;
+  currentDoc = PID;
   fm.openLoader = function() {
     $('#files').css({
       borderColor: '#fff'
@@ -189,7 +188,6 @@ var FileManager = function(config) {
   };
 	
   fm.saveDocument = function() {
- 
     if (currentDoc == null) {
       fm.openSaver();
     } else {
@@ -197,12 +195,12 @@ var FileManager = function(config) {
       var docText = _exportDocument();
       $.ajax({
       
-        url : 'http://localhost/Development/cwrc/save/',
+        url : cwrc_params.BASE_PATH + '/cwrc/save/',
         type: 'POST',
         dataType: 'text',
         data: {
           "text" : docText,
-          'file_pid':filePid
+          'file_pid':PID
         },
         success: function(data, status, xhr) {
           w.editor.isNotDirty = 1; // force clean state
@@ -326,11 +324,12 @@ var FileManager = function(config) {
 
   // added for DHSI
 
-  fm.loadEMICDocument = function(docName) {
+  fm.loadEMICDocument = function() {
 
     w.entities = {};
     w.structs = {};
-    var url = 'http://localhost/CWRCEditor/resources/Islandora/getCWRCData.php?PID=' + $.urlParam('PID');
+    var url = cwrc_params.BASE_PATH + '/cwrc/getCWRC/' + PID;
+  
     var file_content = '';
     $.ajax({
       url: url,
@@ -345,6 +344,7 @@ var FileManager = function(config) {
   };
 	
   var _loadDocumentHandler = function(doc) {
+
     var html = $(doc).find('html');
     if  (html.length ==0){
       return;
