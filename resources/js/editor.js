@@ -63,7 +63,7 @@ var Writer = function(config) {
 	
   var _onInitHandler = function(ed) {
 
-    //changed for DHSI
+   
     ed.setContent('<p>Paste or type your text here.</p>');
 		
     ed.addCommand('isSelectionValid', w.isSelectionValid);
@@ -115,7 +115,7 @@ var Writer = function(config) {
     // populate with the initial paragraph
     w.tree.update(true);
 
-    //  DHSI: populate editor.
+    //  DHSI: populate editor, style next and prev buttons
    
     w.fm.loadEMICDocument();
     if(cwrc_params.position == 0){
@@ -873,6 +873,7 @@ var Writer = function(config) {
           }
         });
   
+// DHSI buttons
 
         ed.addButton('prevpage', {
           title: 'Previous Page',
@@ -932,6 +933,7 @@ var Writer = function(config) {
 			
       plugins: 'paste,-entitycontextmenu,-customtags,-schematags,-viewsource',
       theme_advanced_blockformats: 'p,h1,blockquote',
+//altered for DHSI
       theme_advanced_buttons1: 'customtags,|,addperson,addplace,adddate,addevent,addorg,addcitation,addnote,addtitle,|,editTag,removeTag,|,viewsource,editsource,|,savebutton,saveasbutton,loadbutton,|,   prevpage,nextpage',
       theme_advanced_buttons2: '',
       theme_advanced_buttons3: '',
