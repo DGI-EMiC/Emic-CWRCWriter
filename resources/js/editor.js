@@ -1,15 +1,5 @@
 var Writer = function(config) {
   config = config || {};
-
-  //added for DHSI project
-  var file_content = cwrc_params.ocr;
-  if (file_content == null){
-    file_content = "<p>Paste or type your text here.</p>";
-  }
-
-  var CWRC = config.CWRC;
-
-  // end of DHSI modifications
   var w = {
     editor: null, // reference to the tinyMCE instance we're creating, set in setup
     entities: {}, // entities store
@@ -74,7 +64,7 @@ var Writer = function(config) {
   var _onInitHandler = function(ed) {
 
     //changed for DHSI
-    ed.setContent(file_content);
+    ed.setContent('<p>Paste or type your text here.</p>');
 		
     ed.addCommand('isSelectionValid', w.isSelectionValid);
     ed.addCommand('showError', w.showError);
@@ -125,10 +115,10 @@ var Writer = function(config) {
     // populate with the initial paragraph
     w.tree.update(true);
 
-    //  will replace text data with full CWRC stream if one exists.
-    if (cwrc_params.CWRC != 'FALSE'){
-      w.fm.loadEMICDocument();
-    }
+    //  DHSI: populate editor.
+   
+    w.fm.loadEMICDocument();
+    
  
   };
 	
@@ -841,7 +831,15 @@ var Writer = function(config) {
             ed.execCommand('removeTag');
           }
         });
-				
+
+        ed.addButton('saveasbutton', {
+          title: 'Save As',
+          image: 'img/save_as.png',
+          onclick: function() {
+            w.fm.openSaver();
+          }
+        });
+
         ed.addButton('savebutton', {
           title: 'Save',
           image: 'img/save.png',
@@ -850,13 +848,7 @@ var Writer = function(config) {
           }
         });
 				
-        ed.addButton('saveasbutton', {
-          title: 'Save As',
-          image: 'img/save_as.png',
-          onclick: function() {
-            w.fm.openSaver();
-          }
-        });
+
 				
         ed.addButton('loadbutton', {
           title: 'Load',
@@ -875,6 +867,35 @@ var Writer = function(config) {
             w.fm.editSource();
           }
         });
+  
+        if(cwrc_params.pages[0] != PID){
+          ed.addButton('prevpage', {
+            title: 'Previous Page',
+            image: 'img/prev_arrow.gif',
+            'class': 'prevButton',
+            onclick: function() {
+              PID = cwrc_params.pages[--cwrc_params.position];
+              if(cwrc_params.position > 0){
+                w.fm.loadEMICDocument();
+                $('#reference_image').attr('src', cwrc_params.fedora_url + '/objects/' + PID + '/datastreams/JPEG/content');
+              }
+
+            }
+          });
+        }
+        if(cwrc_params.pages[cwrc_params.pages.length-1] != PID){
+          ed.addButton('nextpage', {
+            title: 'Next Page',
+            image: 'img/next_arrow.gif',
+            onclick: function() {
+              PID = cwrc_params.pages[++cwrc_params.position];
+              if(cwrc_params.position < cwrc_params.pages.length-1){
+                w.fm.loadEMICDocument();
+                $('#reference_image').attr('src', cwrc_params.fedora_url + '/objects/' + PID + '/datastreams/JPEG/content');
+              }
+            }
+          });
+        }
 				
       //				ed.addButton('toggleeditor', {
       //					title: 'Show Advanced Mode',
@@ -902,7 +923,7 @@ var Writer = function(config) {
 			
       plugins: 'paste,-entitycontextmenu,-customtags,-schematags,-viewsource',
       theme_advanced_blockformats: 'p,h1,blockquote',
-      theme_advanced_buttons1: 'customtags,|,addperson,addplace,adddate,addevent,addorg,addcitation,addnote,addtitle,|,editTag,removeTag,|,viewsource,editsource,|,savebutton,saveasbutton,loadbutton',
+      theme_advanced_buttons1: 'customtags,|,addperson,addplace,adddate,addevent,addorg,addcitation,addnote,addtitle,|,editTag,removeTag,|,viewsource,editsource,|,savebutton,saveasbutton,loadbutton,|,   prevpage,nextpage',
       theme_advanced_buttons2: '',
       theme_advanced_buttons3: '',
       theme_advanced_toolbar_location: 'top',

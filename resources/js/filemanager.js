@@ -329,14 +329,14 @@ var FileManager = function(config) {
     w.entities = {};
     w.structs = {};
     var url = cwrc_params.BASE_PATH + '/cwrc/getCWRC/' + PID;
-  
+
     var file_content = '';
     $.ajax({
       url: url,
      
       success: _loadDocumentHandler,
       error: function() {
-        alert("Data loading was unsuccessful");
+        alert("Data loading was not successful");
       },
       dataType: 'xml'
 

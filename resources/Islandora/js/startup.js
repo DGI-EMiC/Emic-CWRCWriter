@@ -13,6 +13,7 @@ $.urlParam = function(name){
 // content is passed to the editor in the Writer's config object
 
 $('document').ready(function(){
+
   PID = $.urlParam('PID');
   $.ajax({
     url: 'http://localhost/Development/cwrc/setupCWRC/' + PID,
@@ -27,9 +28,13 @@ $('document').ready(function(){
 
   });
 
+
   writer = new Writer();
   writer.init();
-  $('#reference_image').attr('src', 'http://localhost:8080/fedora/objects/' + PID + '/datastreams/JPEG/content');
+  $('#reference_image').attr('src', cwrc_params.fedora_url + '/objects/' + PID + '/datastreams/JPEG/content');
+  $('#zoom01').mousedown(function(){
+    return false;
+  });
 
  
 });
