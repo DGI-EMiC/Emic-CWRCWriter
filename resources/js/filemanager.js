@@ -336,7 +336,8 @@ var FileManager = function(config) {
      
       success: _loadDocumentHandler,
       error: function() {
-        alert("Data loading was not successful");
+        
+        w.editor.setContent('<p> Page <strong>' +PID + '</strong> contains errors </p>' );
       },
       dataType: 'xml'
 
