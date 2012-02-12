@@ -1,7 +1,7 @@
 var Writer = function(config) {
   config = config || {};
   var w = {
-    editor: null, // reference to the tinyMCE instance we're creating, set in setup
+    editor: null, // reference to the tinyMCE instance we're creating
     entities: {}, // entities store
     structs: {}, // structs store
 
@@ -118,6 +118,7 @@ var Writer = function(config) {
     //  DHSI: populate editor, style next and prev buttons
    
     w.fm.loadEMICDocument();
+ 
     if(cwrc_params.position == 0){
       $('.prevButton').css('opacity', '.2');
     }
@@ -873,14 +874,19 @@ var Writer = function(config) {
           }
         });
   
-// DHSI buttons
+        // DHSI buttons
 
         ed.addButton('prevpage', {
           title: 'Previous Page',
           image: 'img/prev_arrow.gif',
           'class': 'prevButton',
           onclick: function() {
+
+            var selector = "#page_choose option[value='" + cwrc_params.position + "']";
+            $(selector).removeAttr('selected');
             PID = cwrc_params.pages[--cwrc_params.position];
+            selector = "#page_choose option[value='" + cwrc_params.position + "']";
+            $(selector).attr('selected','selected');
             $('.nextButton').css('opacity', '1');
             if(cwrc_params.position >= 0){
               w.fm.loadEMICDocument();
@@ -899,7 +905,11 @@ var Writer = function(config) {
           image: 'img/next_arrow.gif',
           'class': 'nextButton',
           onclick: function() {
+            var selector = "#page_choose option[value='" + cwrc_params.position + "']";
+            $(selector).removeAttr('selected');
             PID = cwrc_params.pages[++cwrc_params.position];
+            selector = "#page_choose option[value='" + cwrc_params.position + "']";
+            $(selector).attr('selected','selected');
             $('.prevButton').css('opacity', '1');
             if(cwrc_params.position < cwrc_params.pages.length){
               w.fm.loadEMICDocument();
@@ -933,7 +943,7 @@ var Writer = function(config) {
 			
       plugins: 'paste,-entitycontextmenu,-customtags,-schematags,-viewsource',
       theme_advanced_blockformats: 'p,h1,blockquote',
-//altered for DHSI
+      //altered for DHSI
       theme_advanced_buttons1: 'customtags,|,addperson,addplace,adddate,addevent,addorg,addcitation,addnote,addtitle,|,editTag,removeTag,|,viewsource,editsource,|,savebutton,saveasbutton,loadbutton,|,   prevpage,nextpage',
       theme_advanced_buttons2: '',
       theme_advanced_buttons3: '',

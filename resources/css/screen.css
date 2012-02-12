@@ -129,7 +129,7 @@ img {
   float: left;
   position: relative;
   padding: 0 0 1em 0;
-                  	/* no left and right padding on columns, we just make them narrower instead 
+  /* no left and right padding on columns, we just make them narrower instead
 				only padding top and bottom is included here, make it whatever value you need */
   overflow: hidden;
 }
@@ -169,4 +169,8 @@ img {
 #footer p {
   padding: 10px;
   margin: 0;
+}
+
+#page_selector{
+  height: 27px;
 }

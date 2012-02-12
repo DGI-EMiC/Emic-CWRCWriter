@@ -62,6 +62,7 @@
 			</div>
 			<div class="col3">
 				<!-- Column 3 start -->
+        <div id="page_selector">Loading....</div>
 			<div id="zoom01" class="zoom" >
 				<img id="reference_image" src="http://localhost:8080/fedora/objects/islandora%3A1709-006/datastreams/JPEG/content" alt="Image Loading" title="Repository Image" />
 			</div>
